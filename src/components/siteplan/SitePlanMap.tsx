@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { UNITS } from '@/data/siteLayout'
 import {
   SITE_PLAN_POSITIONS,
@@ -9,6 +8,7 @@ import {
   TREE_POSITIONS,
   ROAD_SEGMENTS,
 } from '@/data/sitePlanGeometry'
+import { UnitSitePlanPanel } from './UnitSitePlanPanel'
 import { cn, formatArea, formatCurrency, getStatusLabel } from '@/lib/utils'
 import type { BlockId, KosUnit, UnitStatus } from '@/types'
 
@@ -59,204 +59,146 @@ export function SitePlanMap() {
         ))}
       </div>
 
-      {/* Peta SVG */}
-      <div className="overflow-x-auto rounded-sm border border-brand/10 bg-[#f8f6f1]">
-        <svg
-          viewBox={`0 0 ${width} ${height}`}
-          className="w-full min-w-[800px]"
-          style={{ maxHeight: 580 }}
+      {/* Map + sidebar */}
+      <div className="flex border border-brand/10 overflow-hidden bg-[#f8f6f1]">
+        <div
+          className={cn(
+            'transition-all duration-300 overflow-x-auto',
+            selectedUnit ? 'w-full lg:w-[calc(100%-400px)]' : 'w-full',
+          )}
         >
-          <defs>
-            <pattern id="roadTex" width="10" height="10" patternUnits="userSpaceOnUse">
-              <rect width="10" height="10" fill="#ebe8e2" />
-              <circle cx="5" cy="5" r="0.6" fill="#d5d0c8" />
-            </pattern>
-          </defs>
-
-          <rect width={width} height={height} fill="#f3f0ea" />
-
-          {/* Jalan utama */}
-          <rect {...SITE_LANDMARKS.mainRoad} fill="url(#roadTex)" />
-          <text
-            x={width / 2}
-            y={30}
-            textAnchor="middle"
-            fontSize="10"
-            fill="#999"
-            fontFamily="Inter, sans-serif"
-            letterSpacing="2.5"
+          <svg
+            viewBox={`0 0 ${width} ${height}`}
+            className="w-full min-w-[720px]"
+            style={{ maxHeight: selectedUnit ? 640 : 580 }}
           >
-            JL. RAYA BOJONGSARI
-          </text>
+            <defs>
+              <pattern id="roadTex" width="10" height="10" patternUnits="userSpaceOnUse">
+                <rect width="10" height="10" fill="#ebe8e2" />
+                <circle cx="5" cy="5" r="0.6" fill="#d5d0c8" />
+              </pattern>
+              <filter id="unitShadow" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="1" stdDeviation="2" floodOpacity="0.25" />
+              </filter>
+            </defs>
 
-          {/* Jalan internal */}
-          {ROAD_SEGMENTS.map((r, i) => (
-            <rect key={i} x={r.x} y={r.y} width={r.w} height={r.h} fill="url(#roadTex)" rx={2} />
-          ))}
+            <rect width={width} height={height} fill="#f3f0ea" />
 
-          {/* Pohon */}
-          {TREE_POSITIONS.map(([x, y], i) => (
-            <circle key={i} cx={x} cy={y} r={7} fill="#c5dbb8" opacity={0.85} />
-          ))}
+            <rect {...SITE_LANDMARKS.mainRoad} fill="url(#roadTex)" />
+            <text x={width / 2} y={30} textAnchor="middle" fontSize="10" fill="#999" fontFamily="Inter, sans-serif" letterSpacing="2.5">
+              JL. RAYA BOJONGSARI
+            </text>
 
-          {/* Club House */}
-          <rect
-            x={SITE_LANDMARKS.clubhouse.x}
-            y={SITE_LANDMARKS.clubhouse.y}
-            width={SITE_LANDMARKS.clubhouse.w}
-            height={SITE_LANDMARKS.clubhouse.h}
-            fill="#e0dbd2"
-            stroke="#bfb8aa"
-            strokeWidth={1}
-            rx={3}
-          />
-          <text
-            x={SITE_LANDMARKS.clubhouse.x + SITE_LANDMARKS.clubhouse.w / 2}
-            y={SITE_LANDMARKS.clubhouse.y + 26}
-            textAnchor="middle"
-            fontSize="10"
-            fill="#666"
-            fontFamily="Inter, sans-serif"
-            fontWeight="500"
-          >
-            Club House
-          </text>
-          <text
-            x={SITE_LANDMARKS.clubhouse.x + SITE_LANDMARKS.clubhouse.w / 2}
-            y={SITE_LANDMARKS.clubhouse.y + 42}
-            textAnchor="middle"
-            fontSize="8"
-            fill="#999"
-            fontFamily="Inter, sans-serif"
-          >
-            Gym · Laundry · Mini Market
-          </text>
+            {ROAD_SEGMENTS.map((r, i) => (
+              <rect key={i} x={r.x} y={r.y} width={r.w} height={r.h} fill="url(#roadTex)" rx={2} />
+            ))}
 
-          {/* POS */}
-          <rect
-            x={SITE_LANDMARKS.pos.x}
-            y={SITE_LANDMARKS.pos.y}
-            width={SITE_LANDMARKS.pos.w}
-            height={SITE_LANDMARKS.pos.h}
-            fill="#ddd8cf"
-            stroke="#bfb8aa"
-            strokeWidth={1}
-            rx={2}
-          />
-          <text
-            x={SITE_LANDMARKS.pos.x + SITE_LANDMARKS.pos.w / 2}
-            y={SITE_LANDMARKS.pos.y + 23}
-            textAnchor="middle"
-            fontSize="9"
-            fill="#666"
-            fontFamily="Inter, sans-serif"
-            fontWeight="600"
-          >
-            POS
-          </text>
+            {TREE_POSITIONS.map(([x, y], i) => (
+              <circle key={i} cx={x} cy={y} r={7} fill="#c5dbb8" opacity={0.85} />
+            ))}
 
-          {/* Label blok */}
-          {BLOCK_LABELS.map(({ block, x, y }) => (
-            <g key={block}>
-              <circle cx={x} cy={y} r={12} fill="#1a1a1a" />
-              <text
-                x={x}
-                y={y + 4}
-                textAnchor="middle"
-                fontSize="11"
-                fill="white"
-                fontFamily="Inter, sans-serif"
-                fontWeight="600"
-              >
-                {block}
-              </text>
-            </g>
-          ))}
+            <rect
+              x={SITE_LANDMARKS.clubhouse.x}
+              y={SITE_LANDMARKS.clubhouse.y}
+              width={SITE_LANDMARKS.clubhouse.w}
+              height={SITE_LANDMARKS.clubhouse.h}
+              fill="#e0dbd2"
+              stroke="#bfb8aa"
+              strokeWidth={1}
+              rx={3}
+            />
+            <text x={SITE_LANDMARKS.clubhouse.x + SITE_LANDMARKS.clubhouse.w / 2} y={SITE_LANDMARKS.clubhouse.y + 26} textAnchor="middle" fontSize="10" fill="#666" fontFamily="Inter, sans-serif" fontWeight="500">
+              Club House
+            </text>
+            <text x={SITE_LANDMARKS.clubhouse.x + SITE_LANDMARKS.clubhouse.w / 2} y={SITE_LANDMARKS.clubhouse.y + 42} textAnchor="middle" fontSize="8" fill="#999" fontFamily="Inter, sans-serif">
+              Gym · Laundry · Mini Market
+            </text>
 
-          {/* Unit */}
-          {SITE_PLAN_POSITIONS.map((pos) => {
-            const u = unitMap.get(pos.unitId)
-            if (!u) return null
+            <rect x={SITE_LANDMARKS.pos.x} y={SITE_LANDMARKS.pos.y} width={SITE_LANDMARKS.pos.w} height={SITE_LANDMARKS.pos.h} fill="#ddd8cf" stroke="#bfb8aa" strokeWidth={1} rx={2} />
+            <text x={SITE_LANDMARKS.pos.x + SITE_LANDMARKS.pos.w / 2} y={SITE_LANDMARKS.pos.y + 23} textAnchor="middle" fontSize="9" fill="#666" fontFamily="Inter, sans-serif" fontWeight="600">
+              POS
+            </text>
 
-            const dimmed = activeBlock !== 'all' && u.block !== activeBlock
-            const style = STATUS_STYLE[u.status]
-            const isHover = hoveredUnit?.id === u.id
-            const isSelected = selectedUnit?.id === u.id
-            const clickable = u.status === 'available'
+            {/* Units — rendered before labels */}
+            {SITE_PLAN_POSITIONS.map((pos) => {
+              const u = unitMap.get(pos.unitId)
+              if (!u) return null
 
-            return (
-              <g
-                key={pos.unitId}
-                opacity={dimmed ? 0.2 : 1}
-                style={{ cursor: clickable ? 'pointer' : 'default' }}
-                onMouseEnter={() => setHoveredUnit(u)}
-                onMouseLeave={() => setHoveredUnit(null)}
-                onClick={() => clickable && setSelectedUnit(u)}
-              >
-                <rect
-                  x={pos.x}
-                  y={pos.y}
-                  width={pos.width}
-                  height={pos.height}
-                  fill={style.fill}
-                  stroke={isHover || isSelected ? '#1a1a1a' : style.stroke}
-                  strokeWidth={isHover || isSelected ? 1.5 : 0.75}
-                  rx={1.5}
-                  className={cn(clickable && isHover && 'drop-shadow-sm')}
-                />
-                <text
-                  x={pos.x + pos.width / 2}
-                  y={pos.y + pos.height / 2 - 1}
-                  textAnchor="middle"
-                  fontSize="10"
-                  fill={style.text}
-                  fontFamily="Inter, sans-serif"
-                  fontWeight="600"
-                  pointerEvents="none"
+              const dimmed = activeBlock !== 'all' && u.block !== activeBlock
+              const style = STATUS_STYLE[u.status]
+              const isHover = hoveredUnit?.id === u.id
+              const isSelected = selectedUnit?.id === u.id
+
+              return (
+                <g
+                  key={pos.unitId}
+                  opacity={dimmed ? 0.2 : 1}
+                  style={{ cursor: 'pointer' }}
+                  filter={isHover ? 'url(#unitShadow)' : undefined}
+                  transform={isHover ? `translate(${pos.x + pos.width / 2}, ${pos.y + pos.height / 2}) scale(1.06) translate(${-(pos.x + pos.width / 2)}, ${-(pos.y + pos.height / 2)})` : undefined}
+                  onMouseEnter={() => setHoveredUnit(u)}
+                  onMouseLeave={() => setHoveredUnit(null)}
+                  onClick={() => setSelectedUnit(u)}
                 >
-                  {u.number}
-                </text>
-                <text
-                  x={pos.x + pos.width / 2}
-                  y={pos.y + pos.height / 2 + 9}
-                  textAnchor="middle"
-                  fontSize="6.5"
-                  fill="#888"
-                  fontFamily="Inter, sans-serif"
-                  pointerEvents="none"
-                >
-                  {u.area % 1 === 0 ? u.area : u.area.toFixed(1)}m²
-                </text>
-                {u.status === 'booked' && (
-                  <circle
-                    cx={pos.x + pos.width - 4}
-                    cy={pos.y + 4}
-                    r={3.5}
-                    fill="#ef5350"
-                    pointerEvents="none"
+                  <rect
+                    x={pos.x}
+                    y={pos.y}
+                    width={pos.width}
+                    height={pos.height}
+                    fill={style.fill}
+                    stroke={isHover || isSelected ? '#1a1a1a' : style.stroke}
+                    strokeWidth={isHover || isSelected ? 2 : 0.75}
+                    rx={1.5}
                   />
-                )}
+                  <text x={pos.x + pos.width / 2} y={pos.y + pos.height / 2 - 1} textAnchor="middle" fontSize="10" fill={style.text} fontFamily="Inter, sans-serif" fontWeight="600" pointerEvents="none">
+                    {u.number}
+                  </text>
+                  <text x={pos.x + pos.width / 2} y={pos.y + pos.height / 2 + 9} textAnchor="middle" fontSize="6.5" fill="#888" fontFamily="Inter, sans-serif" pointerEvents="none">
+                    {u.area % 1 === 0 ? u.area : u.area.toFixed(1)}m²
+                  </text>
+                  {u.status === 'booked' && (
+                    <circle cx={pos.x + pos.width - 4} cy={pos.y + 4} r={3.5} fill="#ef5350" pointerEvents="none" />
+                  )}
+                </g>
+              )
+            })}
+
+            {/* Block labels — on top of units */}
+            {BLOCK_LABELS.map(({ block, x, y }) => (
+              <g key={block} pointerEvents="none">
+                <circle cx={x} cy={y} r={13} fill="#1a1a1a" stroke="white" strokeWidth={2} />
+                <text x={x} y={y + 4} textAnchor="middle" fontSize="11" fill="white" fontFamily="Inter, sans-serif" fontWeight="700">
+                  {block}
+                </text>
               </g>
-            )
-          })}
+            ))}
 
-          {/* Kompas */}
-          <g transform="translate(1000, 600)">
-            <circle r={18} fill="white" stroke="#ddd" strokeWidth={0.75} />
-            <text y={-6} textAnchor="middle" fontSize="7" fill="#888" fontFamily="Inter, sans-serif">U</text>
-            <text y={10} textAnchor="middle" fontSize="7" fill="#888" fontFamily="Inter, sans-serif">S</text>
-          </g>
+            <g transform="translate(1000, 600)" pointerEvents="none">
+              <circle r={18} fill="white" stroke="#ddd" strokeWidth={0.75} />
+              <text y={-6} textAnchor="middle" fontSize="7" fill="#888" fontFamily="Inter, sans-serif">U</text>
+              <text y={10} textAnchor="middle" fontSize="7" fill="#888" fontFamily="Inter, sans-serif">S</text>
+            </g>
 
-          {/* Brand */}
-          <text x={28} y={32} fontSize="15" fill="#8b7355" fontFamily="Georgia, serif" fontWeight="600">
-            ATLAS ARCADIA
-          </text>
-        </svg>
+            <text x={28} y={32} fontSize="15" fill="#8b7355" fontFamily="Georgia, serif" fontWeight="600" pointerEvents="none">
+              ATLAS ARCADIA
+            </text>
+          </svg>
+        </div>
+
+        {/* Right sidebar */}
+        {selectedUnit && (
+          <div className="fixed inset-0 z-40 lg:static lg:z-auto lg:w-[400px] lg:shrink-0">
+            <div className="absolute inset-0 bg-black/30 lg:hidden" onClick={() => setSelectedUnit(null)} />
+            <div className="absolute right-0 top-0 h-full w-full max-w-[400px] lg:relative lg:max-w-none">
+              <UnitSitePlanPanel unit={selectedUnit} onClose={() => setSelectedUnit(null)} />
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Tooltip hover — di bawah peta, bukan overlay */}
-      {hoveredUnit && (
-        <div className="flex items-center gap-4 border border-brand/10 bg-white px-5 py-3 text-sm shadow-subtle">
+      {/* Hover info */}
+      {hoveredUnit && !selectedUnit && (
+        <div className="flex flex-wrap items-center gap-3 border border-brand/10 bg-white px-5 py-3 text-sm shadow-subtle">
           <span className="font-serif text-base">{hoveredUnit.label}</span>
           <span className="text-brand-muted">Blok {hoveredUnit.block}</span>
           <span className="text-brand-muted">{formatArea(hoveredUnit.area)}</span>
@@ -271,38 +213,18 @@ export function SitePlanMap() {
             {getStatusLabel(hoveredUnit.status)}
           </span>
           {hoveredUnit.status === 'available' && (
-            <span className="font-medium ml-auto">{formatCurrency(hoveredUnit.price)}/bulan</span>
+            <span className="font-medium">{formatCurrency(hoveredUnit.price)}/bulan</span>
           )}
+          <span className="text-xs text-brand-muted ml-auto">Klik untuk detail →</span>
         </div>
       )}
 
-      {/* Legenda */}
+      {/* Legend */}
       <div className="flex flex-wrap gap-5 text-xs text-brand-muted">
         <Legend color={STATUS_STYLE.available} label="Tersedia" count={stats.available} />
         <Legend color={STATUS_STYLE.booked} label="Terbooking" count={stats.booked} />
         <Legend color={STATUS_STYLE.self_managed} label="Self Managed" count={stats.selfManaged} />
       </div>
-
-      {/* Panel unit terpilih */}
-      {selectedUnit && (
-        <div className="border border-brand/10 bg-white p-5 flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
-          <div>
-            <p className="section-label">Unit Terpilih</p>
-            <h3 className="font-serif text-xl mt-1">{selectedUnit.label}</h3>
-            <p className="text-sm text-brand-muted mt-1">
-              Blok {selectedUnit.block} · {formatArea(selectedUnit.area)} · {formatCurrency(selectedUnit.price)}/bulan
-            </p>
-          </div>
-          <div className="flex gap-3 shrink-0">
-            <button type="button" onClick={() => setSelectedUnit(null)} className="btn-outline text-[10px] px-5 py-2">
-              Batal
-            </button>
-            <Link to={`/kosan/${selectedUnit.id}`} className="btn-primary text-[10px] px-5 py-2">
-              Lihat Detail
-            </Link>
-          </div>
-        </div>
-      )}
     </div>
   )
 }

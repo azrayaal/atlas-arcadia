@@ -2,6 +2,7 @@ import { Link, useParams, Navigate } from 'react-router-dom'
 import { ArrowLeft, ArrowRight, Bed, Maximize, Building2, Layers } from 'lucide-react'
 import { UNITS } from '@/data/siteLayout'
 import { getRoomHeroImage } from '@/data/roomAssets'
+import { FloorPlanGraphic } from '@/components/units/FloorPlanGraphic'
 import { getSimilarUnits } from '@/hooks/useUnitFilters'
 import { SimilarUnits } from '@/components/units/SimilarUnits'
 import { StatusBadge } from '@/components/ui/Badge'
@@ -66,11 +67,7 @@ export function UnitDetailPage() {
             </div>
 
             <div className="border border-brand/10 bg-[#fafaf8] p-6 lg:p-10">
-              <img
-                src={unit.floorPlanImage}
-                alt={`Denah ${unit.label}`}
-                className="w-full h-auto object-contain"
-              />
+              <FloorPlanGraphic type={unit.type} className="w-full h-auto" />
               <p className="mt-4 text-center text-xs text-brand-muted">
                 {unit.dimensions} · {unit.area} m² · {unit.bedrooms} kamar tidur
               </p>

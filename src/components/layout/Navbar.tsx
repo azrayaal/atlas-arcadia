@@ -3,6 +3,7 @@ import { Link, NavLink, useLocation } from 'react-router-dom'
 import { Menu, X, Phone } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
+import { PAGE_ASSETS } from '@/data/roomAssets'
 
 const navLinks = [
   { to: '/tentang', label: 'Tentang' },
@@ -26,8 +27,13 @@ export function Navbar({ transparent = false }: { transparent?: boolean }) {
       )}
     >
       <div className="container flex h-16 items-center justify-between lg:h-20">
-        <Link to="/" className="font-serif text-xl tracking-wide lg:text-2xl">
-          Atlas Arcadia
+        <Link to="/" className="flex items-center gap-3">
+          <img
+            src={PAGE_ASSETS.heroMain}
+            alt=""
+            className="h-9 w-9 rounded-full object-cover ring-1 ring-white/20 lg:h-10 lg:w-10"
+          />
+          <span className="font-serif text-xl tracking-wide lg:text-2xl">Atlas Arcadia</span>
         </Link>
 
         <nav className="hidden items-center gap-8 lg:flex">

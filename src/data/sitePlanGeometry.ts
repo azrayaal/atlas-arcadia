@@ -46,9 +46,9 @@ export function buildSitePlanGeometry(): SitePlanUnitPosition[] {
   p.push(...hRow('D', 268, 188, [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]))
   p.push(...hRow('D', 304, 188, [11, 12, 13, 14, 15, 16, 17, 18, 19, 20]))
 
-  // Blok B — kanan tengah, 2 kolom
-  p.push(...vCol('B', 724, 158, [1, 2, 3, 4, 5, 6, 7, 8]))
-  p.push(...vCol('B', 668, 158, [16, 15, 14, 13, 12, 11, 10, 9]))
+  // Blok B — kanan tengah, 2 kolom (offset agar tidak tumpang label)
+  p.push(...vCol('B', 730, 168, [1, 2, 3, 4, 5, 6, 7, 8]))
+  p.push(...vCol('B', 672, 168, [16, 15, 14, 13, 12, 11, 10, 9]))
 
   // Blok A — kolom kanan (16 unit)
   p.push(...vCol('A', 848, 72, Array.from({ length: 16 }, (_, i) => i + 1)))
@@ -71,7 +71,7 @@ export const BLOCK_LABELS = [
   { block: 'F', x: 60, y: 198 },
   { block: 'C', x: 248, y: 62 },
   { block: 'D', x: 188, y: 252 },
-  { block: 'B', x: 668, y: 142 },
+  { block: 'B', x: 701, y: 108 },
   { block: 'A', x: 848, y: 56 },
   { block: 'E', x: 368, y: 536 },
 ] as const
