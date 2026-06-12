@@ -16,9 +16,9 @@ const STATUS_STYLE: Record<
   UnitStatus,
   { fill: string; stroke: string; text: string }
 > = {
-  available: { fill: '#e8f5e9', stroke: '#4caf50', text: '#2e7d32' },
-  booked: { fill: '#ffebee', stroke: '#ef5350', text: '#c62828' },
-  self_managed: { fill: '#efebe9', stroke: '#8d6e63', text: '#5d4037' },
+  available: { fill: '#f9faf6', stroke: '#a7bfa3', text: '#475b3c' },
+  booked: { fill: '#faebeb', stroke: '#ef5350', text: '#b71c1c' },
+  self_managed: { fill: '#f4efe6', stroke: '#8d6e63', text: '#5d4037' },
 }
 
 export function SitePlanMap() {
@@ -40,7 +40,6 @@ export function SitePlanMap() {
 
   return (
     <div className="space-y-5">
-      {/* Filter blok */}
       <div className="flex flex-wrap items-center gap-2">
         {(['all', 'A', 'B', 'C', 'D', 'E', 'F'] as const).map((block) => (
           <button
@@ -59,7 +58,6 @@ export function SitePlanMap() {
         ))}
       </div>
 
-      {/* Map + sidebar */}
       <div className="flex border border-brand/10 overflow-hidden bg-[#f8f6f1]">
         <div
           className={cn(
@@ -69,32 +67,32 @@ export function SitePlanMap() {
         >
           <svg
             viewBox={`0 0 ${width} ${height}`}
-            className="w-full min-w-[720px]"
-            style={{ maxHeight: selectedUnit ? 640 : 580 }}
+            className="w-full min-w-[900px]"
+            style={{ maxHeight: selectedUnit ? 700 : 620 }}
           >
             <defs>
-              <pattern id="roadTex" width="10" height="10" patternUnits="userSpaceOnUse">
-                <rect width="10" height="10" fill="#ebe8e2" />
-                <circle cx="5" cy="5" r="0.6" fill="#d5d0c8" />
+              <pattern id="roadTex" width="12" height="12" patternUnits="userSpaceOnUse">
+                <rect width="12" height="12" fill="#ede8df" />
+                <circle cx="6" cy="6" r="0.8" fill="#d3c9bb" />
               </pattern>
               <filter id="unitShadow" x="-20%" y="-20%" width="140%" height="140%">
-                <feDropShadow dx="0" dy="1" stdDeviation="2" floodOpacity="0.25" />
+                <feDropShadow dx="0" dy="1" stdDeviation="2" floodOpacity="0.18" />
               </filter>
             </defs>
 
-            <rect width={width} height={height} fill="#f3f0ea" />
+            <rect width={width} height={height} fill="#f5f1e8" />
 
             <rect {...SITE_LANDMARKS.mainRoad} fill="url(#roadTex)" />
-            <text x={width / 2} y={30} textAnchor="middle" fontSize="10" fill="#999" fontFamily="Inter, sans-serif" letterSpacing="2.5">
-              JL. SENOPATI NO 22
+            <text x={width / 2} y={30} textAnchor="middle" fontSize="11" fill="#7a6a57" fontFamily="Inter, sans-serif" letterSpacing="2">
+              JL. RAYA BOJONGSARI
             </text>
 
             {ROAD_SEGMENTS.map((r, i) => (
-              <rect key={i} x={r.x} y={r.y} width={r.w} height={r.h} fill="url(#roadTex)" rx={2} />
+              <rect key={i} x={r.x} y={r.y} width={r.w} height={r.h} fill="url(#roadTex)" rx={3} />
             ))}
 
             {TREE_POSITIONS.map(([x, y], i) => (
-              <circle key={i} cx={x} cy={y} r={7} fill="#c5dbb8" opacity={0.85} />
+              <circle key={i} cx={x} cy={y} r={9} fill="#c5dbb8" opacity={0.92} />
             ))}
 
             <rect
@@ -102,24 +100,32 @@ export function SitePlanMap() {
               y={SITE_LANDMARKS.clubhouse.y}
               width={SITE_LANDMARKS.clubhouse.w}
               height={SITE_LANDMARKS.clubhouse.h}
-              fill="#e0dbd2"
+              fill="#e0d7c9"
+              stroke="#b9a78b"
+              strokeWidth={1}
+              rx={4}
+            />
+            <text x={SITE_LANDMARKS.clubhouse.x + SITE_LANDMARKS.clubhouse.w / 2} y={SITE_LANDMARKS.clubhouse.y + 30} textAnchor="middle" fontSize="10" fill="#6f5f51" fontFamily="Inter, sans-serif" fontWeight="700">
+              Club House Area
+            </text>
+            <text x={SITE_LANDMARKS.clubhouse.x + SITE_LANDMARKS.clubhouse.w / 2} y={SITE_LANDMARKS.clubhouse.y + 46} textAnchor="middle" fontSize="7.5" fill="#8a7a6c" fontFamily="Inter, sans-serif">
+              Gym · Laundry · Mini Market
+            </text>
+
+            <rect
+              x={SITE_LANDMARKS.pos.x}
+              y={SITE_LANDMARKS.pos.y}
+              width={SITE_LANDMARKS.pos.w}
+              height={SITE_LANDMARKS.pos.h}
+              fill="#ddd8cf"
               stroke="#bfb8aa"
               strokeWidth={1}
               rx={3}
             />
-            <text x={SITE_LANDMARKS.clubhouse.x + SITE_LANDMARKS.clubhouse.w / 2} y={SITE_LANDMARKS.clubhouse.y + 26} textAnchor="middle" fontSize="10" fill="#666" fontFamily="Inter, sans-serif" fontWeight="500">
-              Club House
-            </text>
-            <text x={SITE_LANDMARKS.clubhouse.x + SITE_LANDMARKS.clubhouse.w / 2} y={SITE_LANDMARKS.clubhouse.y + 42} textAnchor="middle" fontSize="8" fill="#999" fontFamily="Inter, sans-serif">
-              Gym · Laundry · Mini Market
-            </text>
-
-            <rect x={SITE_LANDMARKS.pos.x} y={SITE_LANDMARKS.pos.y} width={SITE_LANDMARKS.pos.w} height={SITE_LANDMARKS.pos.h} fill="#ddd8cf" stroke="#bfb8aa" strokeWidth={1} rx={2} />
-            <text x={SITE_LANDMARKS.pos.x + SITE_LANDMARKS.pos.w / 2} y={SITE_LANDMARKS.pos.y + 23} textAnchor="middle" fontSize="9" fill="#666" fontFamily="Inter, sans-serif" fontWeight="600">
+            <text x={SITE_LANDMARKS.pos.x + SITE_LANDMARKS.pos.w / 2} y={SITE_LANDMARKS.pos.y + 23} textAnchor="middle" fontSize="9" fill="#5f4f3f" fontFamily="Inter, sans-serif" fontWeight="700">
               POS
             </text>
 
-            {/* Units — rendered before labels */}
             {SITE_PLAN_POSITIONS.map((pos) => {
               const u = unitMap.get(pos.unitId)
               if (!u) return null
@@ -132,10 +138,10 @@ export function SitePlanMap() {
               return (
                 <g
                   key={pos.unitId}
-                  opacity={dimmed ? 0.2 : 1}
+                  opacity={dimmed ? 0.22 : 1}
                   style={{ cursor: 'pointer' }}
                   filter={isHover ? 'url(#unitShadow)' : undefined}
-                  transform={isHover ? `translate(${pos.x + pos.width / 2}, ${pos.y + pos.height / 2}) scale(1.06) translate(${-(pos.x + pos.width / 2)}, ${-(pos.y + pos.height / 2)})` : undefined}
+                  transform={isHover ? `translate(${pos.x + pos.width / 2}, ${pos.y + pos.height / 2}) scale(1.04) translate(${-(pos.x + pos.width / 2)}, ${-(pos.y + pos.height / 2)})` : undefined}
                   onMouseEnter={() => setHoveredUnit(u)}
                   onMouseLeave={() => setHoveredUnit(null)}
                   onClick={() => setSelectedUnit(u)}
@@ -146,46 +152,44 @@ export function SitePlanMap() {
                     width={pos.width}
                     height={pos.height}
                     fill={style.fill}
-                    stroke={isHover || isSelected ? '#1a1a1a' : style.stroke}
-                    strokeWidth={isHover || isSelected ? 2 : 0.75}
-                    rx={1.5}
+                    stroke={isHover || isSelected ? '#3b2e28' : style.stroke}
+                    strokeWidth={isHover || isSelected ? 1.8 : 0.9}
+                    rx={2}
                   />
-                  <text x={pos.x + pos.width / 2} y={pos.y + pos.height / 2 - 1} textAnchor="middle" fontSize="10" fill={style.text} fontFamily="Inter, sans-serif" fontWeight="600" pointerEvents="none">
+                  <text x={pos.x + pos.width / 2} y={pos.y + pos.height / 2 - 4} textAnchor="middle" fontSize="8.5" fill={style.text} fontFamily="Inter, sans-serif" fontWeight="700" pointerEvents="none">
                     {u.number}
                   </text>
-                  <text x={pos.x + pos.width / 2} y={pos.y + pos.height / 2 + 9} textAnchor="middle" fontSize="6.5" fill="#888" fontFamily="Inter, sans-serif" pointerEvents="none">
-                    {u.area % 1 === 0 ? u.area : u.area.toFixed(1)}m²
+                  <text x={pos.x + pos.width / 2} y={pos.y + pos.height / 2 + 8} textAnchor="middle" fontSize="5.5" fill="#7b6c5f" fontFamily="Inter, sans-serif" pointerEvents="none">
+                    {u.area % 1 === 0 ? `${u.area}m²` : `${u.area.toFixed(1)}m²`}
                   </text>
                   {u.status === 'booked' && (
-                    <circle cx={pos.x + pos.width - 4} cy={pos.y + 4} r={3.5} fill="#ef5350" pointerEvents="none" />
+                    <circle cx={pos.x + pos.width - 5} cy={pos.y + 5} r={3.5} fill="#ef5350" pointerEvents="none" />
                   )}
                 </g>
               )
             })}
 
-            {/* Block labels — on top of units */}
             {BLOCK_LABELS.map(({ block, x, y }) => (
               <g key={block} pointerEvents="none">
-                <circle cx={x} cy={y} r={13} fill="#1a1a1a" stroke="white" strokeWidth={2} />
-                <text x={x} y={y + 4} textAnchor="middle" fontSize="11" fill="white" fontFamily="Inter, sans-serif" fontWeight="700">
+                <circle cx={x} cy={y} r={13} fill="#3b2f26" stroke="#fff" strokeWidth={2} />
+                <text x={x} y={y + 4} textAnchor="middle" fontSize="11" fill="#fff" fontFamily="Inter, sans-serif" fontWeight="700">
                   {block}
                 </text>
               </g>
             ))}
 
-            <g transform="translate(1000, 600)" pointerEvents="none">
-              <circle r={18} fill="white" stroke="#ddd" strokeWidth={0.75} />
-              <text y={-6} textAnchor="middle" fontSize="7" fill="#888" fontFamily="Inter, sans-serif">U</text>
-              <text y={10} textAnchor="middle" fontSize="7" fill="#888" fontFamily="Inter, sans-serif">S</text>
+            <g transform="translate(960, 600)" pointerEvents="none">
+              <circle r={18} fill="#fff" stroke="#d8d0c8" strokeWidth={0.75} />
+              <text y={-6} textAnchor="middle" fontSize="7" fill="#7b6d5f" fontFamily="Inter, sans-serif">U</text>
+              <text y={10} textAnchor="middle" fontSize="7" fill="#7b6d5f" fontFamily="Inter, sans-serif">S</text>
             </g>
 
-            <text x={28} y={32} fontSize="15" fill="#8b7355" fontFamily="Georgia, serif" fontWeight="600" pointerEvents="none">
+            <text x={30} y={36} fontSize="16" fill="#8a6f45" fontFamily="Georgia, serif" fontWeight="600" pointerEvents="none">
               ATLAS ARCADIA
             </text>
           </svg>
         </div>
 
-        {/* Right sidebar */}
         {selectedUnit && (
           <div className="fixed inset-0 z-40 lg:static lg:z-auto lg:w-[400px] lg:shrink-0">
             <div className="absolute inset-0 bg-black/30 lg:hidden" onClick={() => setSelectedUnit(null)} />
@@ -196,7 +200,6 @@ export function SitePlanMap() {
         )}
       </div>
 
-      {/* Hover info */}
       {hoveredUnit && !selectedUnit && (
         <div className="flex flex-wrap items-center gap-3 border border-brand/10 bg-white px-5 py-3 text-sm shadow-subtle">
           <span className="font-serif text-base">{hoveredUnit.label}</span>
@@ -219,7 +222,6 @@ export function SitePlanMap() {
         </div>
       )}
 
-      {/* Legend */}
       <div className="flex flex-wrap gap-5 text-xs text-brand-muted">
         <Legend color={STATUS_STYLE.available} label="Tersedia" count={stats.available} />
         <Legend color={STATUS_STYLE.booked} label="Terbooking" count={stats.booked} />
