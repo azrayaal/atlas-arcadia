@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState, useEffect } from 'react'
 import { UNITS } from '@/data/siteLayout'
 import {
   SITE_PLAN_POSITIONS,
@@ -10,7 +10,7 @@ import {
 } from '@/data/sitePlanGeometry'
 import { UnitSitePlanPanel } from './UnitSitePlanPanel'
 import { cn, formatArea, formatCurrency, getStatusLabel } from '@/lib/utils'
-import type { BlockId, KosUnit, UnitStatus } from '@/types'
+import type { BlockId, KosUnit, UnitStatus, SitePlanUnitPosition } from '@/types'
 
 const STATUS_STYLE: Record<
   UnitStatus,
@@ -25,6 +25,20 @@ export function SitePlanMap() {
   const [hoveredUnit, setHoveredUnit] = useState<KosUnit | null>(null)
   const [selectedUnit, setSelectedUnit] = useState<KosUnit | null>(null)
   const [activeBlock, setActiveBlock] = useState<BlockId | 'all'>('all')
+  const [editMode, setEditMode] = useState(false)
+
+  // Local editable copy of positions so user can drag units
+  const [positions, setPositions] = useState<SitePlanUnitPosition[]>(() =>
+    SITE_PLAN_POSITIONS.map((p) => ({ ...p })),
+  )
+
+  const svgRef = useRef<SVGSVGElement | null>(null)
+  const dragRef = useRef<{
+    id: string
+    offsetX: number
+    offsetY: number
+    pointerId: number
+  } | null>(null)
 
   const unitMap = useMemo(() => new Map(UNITS.map((u) => [u.id, u])), [])
   const { width, height } = SITE_PLAN_VIEWBOX
@@ -37,6 +51,11 @@ export function SitePlanMap() {
     }),
     [],
   )
+
+  useEffect(() => {
+    // keep positions in sync if SITE_PLAN_POSITIONS changes externally
+    setPositions(SITE_PLAN_POSITIONS.map((p) => ({ ...p })))
+  }, [SITE_PLAN_POSITIONS])
 
   return (
     <div className="space-y-5">
@@ -58,6 +77,35 @@ export function SitePlanMap() {
         ))}
       </div>
 
+      <div className="mt-3 flex items-center gap-3">
+        <button
+          type="button"
+          onClick={() => setEditMode((s) => !s)}
+          className={cn(
+            'px-3 py-1.5 text-sm uppercase tracking-widest border transition-colors rounded',
+            editMode ? 'bg-brand text-white border-brand' : 'border-brand/15 text-brand-muted hover:border-brand/40 hover:text-brand',
+          )}
+        >
+          {editMode ? 'Exit Edit' : 'Edit Positions'}
+        </button>
+        {editMode && (
+          <button
+            type="button"
+            onClick={() => {
+              const json = JSON.stringify(positions, null, 2)
+              if (navigator.clipboard) navigator.clipboard.writeText(json)
+              // fallback
+              else alert(json)
+              alert('Positions copied to clipboard')
+            }}
+            className="px-3 py-1.5 text-sm uppercase tracking-widest border border-brand/15 text-brand-muted hover:border-brand"
+          >
+            Export JSON
+          </button>
+        )}
+        {editMode && <p className="text-xs text-brand-muted ml-2">Drag units to adjust positions, then export.</p>}
+      </div>
+
       <div className="flex border border-brand/10 overflow-hidden bg-[#f8f6f1]">
         <div
           className={cn(
@@ -66,9 +114,36 @@ export function SitePlanMap() {
           )}
         >
           <svg
+            ref={svgRef}
             viewBox={`0 0 ${width} ${height}`}
             className="w-full min-w-[900px]"
             style={{ maxHeight: selectedUnit ? 700 : 620 }}
+            onPointerMove={(e) => {
+              if (!dragRef.current) return
+              const svg = svgRef.current
+              if (!svg) return
+              const pt = svg.createSVGPoint()
+              pt.x = e.clientX
+              pt.y = e.clientY
+              const ctm = svg.getScreenCTM()
+              if (!ctm) return
+              const loc = pt.matrixTransform(ctm.inverse())
+              setPositions((prev) =>
+                prev.map((p) =>
+                  p.unitId === dragRef.current!.id
+                    ? { ...p, x: loc.x - dragRef.current!.offsetX, y: loc.y - dragRef.current!.offsetY }
+                    : p,
+                ),
+              )
+            }}
+            onPointerUp={(e) => {
+              if (!dragRef.current) return
+              try {
+                (e.target as Element).releasePointerCapture?.(dragRef.current.pointerId)
+              } catch {}
+              dragRef.current = null
+            }}
+            onPointerCancel={() => (dragRef.current = null)}
           >
             <defs>
               <pattern id="roadTex" width="12" height="12" patternUnits="userSpaceOnUse">
@@ -126,7 +201,7 @@ export function SitePlanMap() {
               POS
             </text>
 
-            {SITE_PLAN_POSITIONS.map((pos) => {
+            {positions.map((pos) => {
               const u = unitMap.get(pos.unitId)
               if (!u) return null
 
@@ -144,7 +219,27 @@ export function SitePlanMap() {
                   transform={isHover ? `translate(${pos.x + pos.width / 2}, ${pos.y + pos.height / 2}) scale(1.04) translate(${-(pos.x + pos.width / 2)}, ${-(pos.y + pos.height / 2)})` : undefined}
                   onMouseEnter={() => setHoveredUnit(u)}
                   onMouseLeave={() => setHoveredUnit(null)}
-                  onClick={() => setSelectedUnit(u)}
+                  onClick={() => !editMode && setSelectedUnit(u)}
+                  onPointerDown={(e) => {
+                    if (!editMode) return
+                    const svg = svgRef.current
+                    if (!svg) return
+                    const pt = svg.createSVGPoint()
+                    pt.x = e.clientX
+                    pt.y = e.clientY
+                    const ctm = svg.getScreenCTM()
+                    if (!ctm) return
+                    const loc = pt.matrixTransform(ctm.inverse())
+                    dragRef.current = {
+                      id: pos.unitId,
+                      offsetX: loc.x - pos.x,
+                      offsetY: loc.y - pos.y,
+                      pointerId: e.pointerId,
+                    }
+                    try {
+                      (e.target as Element).setPointerCapture?.(e.pointerId)
+                    } catch {}
+                  }}
                 >
                   <rect
                     x={pos.x}
