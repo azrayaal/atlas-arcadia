@@ -14,6 +14,37 @@ export const HOUSE_ASSETS = [
   '/assets/house/house4.png',
 ] as const
 
+export const ENV_ASSETS = [
+  '/assets/env/env1.png',
+  '/assets/env/env2.png',
+  '/assets/env/env3.png',
+  '/assets/env/env4.png',
+  '/assets/env/env5.png',
+  '/assets/env/env6.png',
+  '/assets/env/env7.png',
+  '/assets/env/env8.png',
+  '/assets/env/env9.png',
+  '/assets/env/env10.png',
+  '/assets/env/env11.png',
+] as const
+
+export const FACILITIES_ASSETS = [
+  '/assets/facilities/front_facilities.png',
+  '/assets/facilities/siteplan_facilities.png',
+  '/assets/facilities/facilities1.png',
+  '/assets/facilities/facilities2.png',
+  '/assets/facilities/facilities3.png',
+  '/assets/facilities/facilities4.png',
+  '/assets/facilities/facilities5.png',
+  '/assets/facilities/facilities7.png',
+  '/assets/facilities/facilities8.png',
+  '/assets/facilities/facilities9.png',
+  '/assets/facilities/facilities10.png',
+  '/assets/facilities/facilities11.png',
+  '/assets/facilities/facilities12.png',
+  '/assets/facilities/facilities13.png',
+] as const
+
 export const BLOCK_HERO_ASSETS: Record<BlockId, string> = {
   A: HOUSE_ASSETS[0],
   B: HOUSE_ASSETS[1],
@@ -64,6 +95,7 @@ export function getRoomHeroImage(type: UnitType): string {
 
 export const PAGE_ASSETS = {
   heroMain: '/assets/arcadia.png',
+  navLogo: '/assets/arcadia.logo.png',
   masterplan: '/assets/arcadia.png',
   heroInterior: ROOM_ASSETS[0],
   unitsBanner: HOUSE_ASSETS[0],

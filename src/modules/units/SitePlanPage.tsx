@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { LayoutGrid, Map } from 'lucide-react'
 import { SitePlanMap } from '@/components/siteplan/SitePlanMap'
 import { AVAILABLE_UNITS } from '@/data/siteLayout'
+import { ENV_ASSETS, FACILITIES_ASSETS } from '@/data/roomAssets'
 import { cn } from '@/lib/utils'
 
 export function SitePlanPage() {
@@ -47,6 +48,44 @@ export function SitePlanPage() {
             <StatBox value="79" label="Total Unit" />
             <StatBox value={String(AVAILABLE_UNITS.length)} label="Tersedia" />
             <StatBox value="6" label="Blok Hunian" />
+          </div>
+
+          <div className="mt-14 grid gap-12 lg:grid-cols-2">
+            <section>
+              <p className="section-label">Lingkungan</p>
+              <h2 className="font-serif text-3xl">Suasana Lingkungan</h2>
+              <p className="mt-4 text-sm text-brand-muted leading-relaxed max-w-xl">
+                Nikmati preview lingkungan di sekitar Atlas Arcadia, mulai dari area taman, jalur pejalan kaki, dan pemandangan outdoor.
+              </p>
+              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                {ENV_ASSETS.slice(0, 4).map((src) => (
+                  <img
+                    key={src}
+                    src={src}
+                    alt="Lingkungan Atlas Arcadia"
+                    className="h-52 w-full rounded-3xl object-cover border border-brand/10"
+                  />
+                ))}
+              </div>
+            </section>
+
+            <section>
+              <p className="section-label">Fasilitas</p>
+              <h2 className="font-serif text-3xl">Fasilitas Kompleks</h2>
+              <p className="mt-4 text-sm text-brand-muted leading-relaxed max-w-xl">
+                Lihat fasilitas unggulan Atlas Arcadia, mulai dari club house, area service, hingga ruang publik yang mendukung gaya hidup modern.
+              </p>
+              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                {FACILITIES_ASSETS.slice(0, 4).map((src) => (
+                  <img
+                    key={src}
+                    src={src}
+                    alt="Fasilitas Atlas Arcadia"
+                    className="h-52 w-full rounded-3xl object-cover border border-brand/10"
+                  />
+                ))}
+              </div>
+            </section>
           </div>
         </div>
       </section>

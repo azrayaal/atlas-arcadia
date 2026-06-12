@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { Menu, X, Phone } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -14,27 +14,46 @@ const navLinks = [
 
 export function Navbar({ transparent = false }: { transparent?: boolean }) {
   const [open, setOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
   const location = useLocation()
   const isHome = location.pathname === '/'
+
+  useEffect(() => {
+    if (!isHome) {
+      setScrolled(false)
+      return
+    }
+
+    const onScroll = () => setScrolled(window.scrollY > 30)
+    onScroll()
+    window.addEventListener('scroll', onScroll)
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [isHome])
 
   return (
     <header
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-        transparent && isHome
-          ? 'bg-transparent text-white'
+        isHome
+          ? transparent && !scrolled
+            ? 'bg-transparent text-white'
+            : 'bg-slate-950/95 text-white border-b border-white/10 shadow-[0_15px_60px_-35px_rgba(15,23,42,0.75)]'
           : 'bg-white/95 backdrop-blur-md text-brand border-b border-brand/5',
       )}
     >
       <div className="container flex h-16 items-center justify-between lg:h-20">
-        <Link to="/" className="flex items-center gap-3">
-          <img
-            src={PAGE_ASSETS.heroMain}
-            alt=""
-            className="h-9 w-9 rounded-full object-cover ring-1 ring-white/20 lg:h-10 lg:w-10"
-          />
-          <span className="font-serif text-xl tracking-wide lg:text-2xl">Atlas Arcadia</span>
-        </Link>
+        <div className="flex items-center gap-3">
+            {/* <Link to="/" className="flex p-1 shadow-sm">
+              <img
+                src={PAGE_ASSETS.navLogo}
+                alt="Atlas Arcadia logo"
+                className=""
+              />
+            </Link> */}
+          <Link to="/" className="font-serif text-xl tracking-wide lg:text-2xl">
+            Atlas Arcadia
+          </Link>
+        </div>
 
         <nav className="hidden items-center gap-8 lg:flex">
           {navLinks.map((link) => (
