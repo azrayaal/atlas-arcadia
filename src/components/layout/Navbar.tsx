@@ -3,7 +3,7 @@ import { Link, NavLink, useLocation } from 'react-router-dom'
 import { Menu, X, Phone } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
-import { PAGE_ASSETS } from '@/data/roomAssets'
+// import { PAGE_ASSETS } from '@/data/roomAssets'
 
 const navLinks = [
   { to: '/tentang', label: 'Tentang' },
