@@ -3,7 +3,7 @@ import { LayoutGrid, Map } from 'lucide-react'
 import { UnitCard } from '@/components/units/UnitCard'
 import { UnitFiltersPanel } from '@/components/units/UnitFilters'
 import { useUnitFilters } from '@/hooks/useUnitFilters'
-import { PAGE_ASSETS } from '@/data/roomAssets'
+import { getBlockHeroImage, PAGE_ASSETS } from '@/data/roomAssets'
 import { cn } from '@/lib/utils'
 
 export function UnitsPage() {
@@ -47,8 +47,12 @@ export function UnitsPage() {
 
           <div className="mt-10 aspect-[21/9] overflow-hidden">
             <img
-              src={PAGE_ASSETS.unitsBanner}
-              alt="Interior kamar Atlas Arcadia"
+              src={filters.block === 'all' ? PAGE_ASSETS.unitsBanner : getBlockHeroImage(filters.block)}
+              alt={
+                filters.block === 'all'
+                  ? 'Exterior kamar Atlas Arcadia'
+                  : `Exterior Blok ${filters.block} Atlas Arcadia`
+              }
               className="h-full w-full object-cover"
             />
           </div>
@@ -97,7 +101,7 @@ export function UnitsPage() {
           <div>
             <h2 className="font-serif text-3xl lg:text-4xl">Apa itu Atlas Arcadia?</h2>
             <p className="mt-6 text-sm text-brand-muted leading-relaxed">
-              Atlas Arcadia adalah kompleks hunian terintegrasi di Bojongsari yang menggabungkan
+              Atlas Arcadia adalah kompleks hunian terintegrasi di Dukuhwaluh yang menggabungkan
               privasi unit individual dengan fasilitas komunal premium. Setiap unit dirancang
               dengan efisiensi ruang optimal — mulai dari 72 m² hingga 134 m² — dilengkapi
               AC, kamar mandi dalam, dan akses WiFi.

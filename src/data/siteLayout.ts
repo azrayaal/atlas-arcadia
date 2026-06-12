@@ -123,11 +123,11 @@ export const AREA_RANGE = {
 }
 
 export const COMMUNITY_INFO = {
-  address: 'JL. Raya Bojongsari, Bojongsari, Depok',
-  phone: '+62 21 1234 5678',
+  address: 'Jl. Senopati No 22, Dukuhwaluh, Kec. Kembaran, Kab. Banyumas',
+  phone: '085169934058',
   email: 'info@atlasarcadia.id',
   hours: 'Senin – Minggu, 09:00 – 18:00',
-  coordinates: { lat: -6.3705, lng: 106.7312 },
+  coordinates: { lat: -7.4046, lng: 109.28195 },
 }
 
 export const AMENITIES = [

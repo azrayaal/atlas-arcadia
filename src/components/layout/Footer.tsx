@@ -9,7 +9,7 @@ export function Footer() {
           <div>
             <p className="font-serif text-2xl">Atlas Arcadia</p>
             <p className="mt-4 text-sm text-white/60 leading-relaxed">
-              Hunian premium di JL. Raya Bojongsari. Kompleks kos modern dengan fasilitas lengkap dan smart living ecosystem.
+              Hunian premium di Jl. Senopati No 22, Dukuhwaluh. Kompleks kos modern dengan fasilitas lengkap dan smart living ecosystem.
             </p>
           </div>
 

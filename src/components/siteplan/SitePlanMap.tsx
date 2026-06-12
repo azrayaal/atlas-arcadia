@@ -86,7 +86,7 @@ export function SitePlanMap() {
 
             <rect {...SITE_LANDMARKS.mainRoad} fill="url(#roadTex)" />
             <text x={width / 2} y={30} textAnchor="middle" fontSize="10" fill="#999" fontFamily="Inter, sans-serif" letterSpacing="2.5">
-              JL. RAYA BOJONGSARI
+              JL. SENOPATI NO 22
             </text>
 
             {ROAD_SEGMENTS.map((r, i) => (

@@ -12,7 +12,7 @@ export function AboutPage() {
             Atlas Arcadia
           </h1>
           <p className="mt-8 text-sm text-brand-muted leading-relaxed max-w-2xl">
-            Atlas Arcadia adalah kompleks hunian premium yang terletak di JL. Raya Bojongsari, Depok.
+            Atlas Arcadia adalah kompleks hunian premium yang terletak di Jl. Senopati No 22, Dukuhwaluh, Banyumas.
             Dirancang untuk generasi urban yang mengutamakan kualitas hidup, privasi, dan kenyamanan
             dalam satu ekosistem terintegrasi.
           </p>
@@ -29,7 +29,7 @@ export function AboutPage() {
           <div>
             <h2 className="font-serif text-3xl">Visi Kami</h2>
             <p className="mt-6 text-sm text-brand-muted leading-relaxed">
-              Menghadirkan standar hunian baru di kawasan Bojongsari — di mana setiap penghuni
+              Menghadirkan standar hunian baru di kawasan Dukuhwaluh — di mana setiap penghuni
               mendapatkan ruang pribadi yang nyaman, fasilitas komunal yang lengkap, dan
               teknologi smart living yang mempermudah kehidupan sehari-hari.
             </p>

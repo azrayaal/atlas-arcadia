@@ -61,7 +61,7 @@ export function SitePlanPage() {
             </div>
             <div className="border border-brand/10 p-4">
               <p className="font-medium text-brand">POS Security</p>
-              <p className="mt-1">Pintu masuk utama dari JL. Raya Bojongsari · 24 jam</p>
+              <p className="mt-1">Pintu masuk utama dari Jl. Senopati No 22, Dukuhwaluh · 24 jam</p>
             </div>
           </div>
         </div>

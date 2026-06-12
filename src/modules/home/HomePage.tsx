@@ -31,14 +31,14 @@ export function HomePage() {
             transition={{ duration: 0.8 }}
             className="max-w-xl text-white"
           >
-            <p className="section-label text-white/50 mb-4">Atlas Arcadia · JL. Raya Bojongsari</p>
+            <p className="section-label text-white/50 mb-4">Atlas Arcadia · Jl. Senopati No 22, Dukuhwaluh</p>
             <h1 className="font-serif text-5xl leading-[1.1] lg:text-7xl">
               Temukan ruang
               <br />
               yang menjadi milik Anda
             </h1>
             <p className="mt-6 max-w-md text-sm text-white/65 leading-relaxed lg:text-base">
-              Kompleks hunian premium di tepi sawah Bojongsari — {AVAILABLE_UNITS.length} kamar tersedia,
+              Kompleks hunian premium di Dukuhwaluh, Banyumas — {AVAILABLE_UNITS.length} kamar tersedia,
               fasilitas lengkap, keamanan 24 jam.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
@@ -103,11 +103,11 @@ export function HomePage() {
             <div>
               <p className="section-label mb-4">01 · Tentang</p>
               <h2 className="font-serif text-3xl lg:text-5xl leading-tight">
-                Hunian modern di jantung Bojongsari
+                Hunian modern di jantung Dukuhwaluh
               </h2>
               <p className="mt-6 text-sm text-brand-muted leading-relaxed">
                 Atlas Arcadia adalah kompleks kos premium yang dirancang dengan standar hunian modern.
-                Terletak strategis di JL. Raya Bojongsari, kompleks ini menawarkan privasi, keamanan,
+                Terletak strategis di Jl. Senopati No 22, Dukuhwaluh, kompleks ini menawarkan privasi, keamanan,
                 dan fasilitas lengkap untuk generasi urban yang mengutamakan kualitas hidup.
               </p>
               <p className="mt-4 text-sm text-brand-muted leading-relaxed">

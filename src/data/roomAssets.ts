@@ -1,34 +1,31 @@
-import type { UnitType, RoomCount } from '@/types'
+import type { BlockId, UnitType, RoomCount } from '@/types'
 
-/** Curated Unsplash photos — interior kamar kos & hunian */
-const PHOTOS = {
-  bedroom: {
-    single: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=1200&q=80&fit=crop',
-    cozy: 'https://images.unsplash.com/photo-1522771739844-6a9f6d4450ba?w=1200&q=80&fit=crop',
-    modern: 'https://images.unsplash.com/photo-1616594039964-67bf7099a071?w=1200&q=80&fit=crop',
-    twin: 'https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?w=1200&q=80&fit=crop',
-    master: 'https://images.unsplash.com/photo-1615529328331-f8917597711f?w=1200&q=80&fit=crop',
-    spacious: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1200&q=80&fit=crop',
-  },
-  living: {
-    compact: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200&q=80&fit=crop',
-    modern: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1200&q=80&fit=crop',
-    open: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=1200&q=80&fit=crop',
-  },
-  bathroom: {
-    clean: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=1200&q=80&fit=crop',
-    modern: 'https://images.unsplash.com/photo-1620626011761-996317b8d101?w=1200&q=80&fit=crop',
-  },
-  exterior: {
-    building: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1200&q=80&fit=crop',
-    courtyard: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80&fit=crop',
-    entrance: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80&fit=crop',
-  },
-  hero: {
-    interior: 'https://images.unsplash.com/photo-1600210492494-0946919438ea?w=1600&q=80&fit=crop',
-    listing: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1600&q=80&fit=crop',
-  },
-} as const
+export const ROOM_ASSETS = [
+  '/assets/rooms/room1.png',
+  '/assets/rooms/room2.png',
+  '/assets/rooms/room3.png',
+  '/assets/rooms/room4.png',
+] as const
+
+export const HOUSE_ASSETS = [
+  '/assets/house/house1.png',
+  '/assets/house/house2.png',
+  '/assets/house/house3.png',
+  '/assets/house/house4.png',
+] as const
+
+export const BLOCK_HERO_ASSETS: Record<BlockId, string> = {
+  A: HOUSE_ASSETS[0],
+  B: HOUSE_ASSETS[1],
+  C: HOUSE_ASSETS[2],
+  D: HOUSE_ASSETS[3],
+  E: HOUSE_ASSETS[0],
+  F: HOUSE_ASSETS[1],
+}
+
+export function getBlockHeroImage(block: BlockId | 'all'): string {
+  return block === 'all' ? HOUSE_ASSETS[0] : BLOCK_HERO_ASSETS[block]
+}
 
 const FLOOR_PLANS: Record<UnitType, string> = {
   Standard: '/assets/floor-plans/standard.svg',
@@ -43,40 +40,35 @@ export function getFloorPlanAsset(type: UnitType): string {
 export function getRoomImages(type: UnitType, bedrooms: RoomCount): string[] {
   switch (type) {
     case 'Premium':
-      return [
-        PHOTOS.bedroom.spacious,
-        PHOTOS.bedroom.master,
-        PHOTOS.living.open,
-        PHOTOS.bathroom.modern,
-      ]
+      return [ROOM_ASSETS[2], ROOM_ASSETS[3], ROOM_ASSETS[0], ROOM_ASSETS[1]]
     case 'Corner':
       return bedrooms >= 2
-        ? [PHOTOS.bedroom.modern, PHOTOS.bedroom.twin, PHOTOS.living.compact, PHOTOS.bathroom.clean]
-        : [PHOTOS.bedroom.cozy, PHOTOS.living.modern, PHOTOS.bathroom.clean]
+        ? [ROOM_ASSETS[1], ROOM_ASSETS[2], ROOM_ASSETS[3], ROOM_ASSETS[0]]
+        : [ROOM_ASSETS[0], ROOM_ASSETS[1], ROOM_ASSETS[2], ROOM_ASSETS[3]]
     case 'Standard':
     default:
-      return [PHOTOS.bedroom.single, PHOTOS.bedroom.cozy, PHOTOS.living.compact, PHOTOS.bathroom.clean]
+      return [ROOM_ASSETS[0], ROOM_ASSETS[1], ROOM_ASSETS[2], ROOM_ASSETS[3]]
   }
 }
 
 export function getRoomHeroImage(type: UnitType): string {
   switch (type) {
     case 'Premium':
-      return PHOTOS.bedroom.spacious
+      return ROOM_ASSETS[2]
     case 'Corner':
-      return PHOTOS.bedroom.modern
+      return ROOM_ASSETS[1]
     default:
-      return PHOTOS.bedroom.single
+      return ROOM_ASSETS[0]
   }
 }
 
 export const PAGE_ASSETS = {
   heroMain: '/assets/arcadia.png',
   masterplan: '/assets/arcadia.png',
-  heroInterior: PHOTOS.hero.interior,
-  unitsBanner: PHOTOS.hero.listing,
-  aboutExterior: PHOTOS.exterior.building,
-  aboutCourtyard: PHOTOS.exterior.courtyard,
-  aboutInterior: PHOTOS.living.modern,
-  locationBuilding: PHOTOS.exterior.entrance,
+  heroInterior: ROOM_ASSETS[0],
+  unitsBanner: HOUSE_ASSETS[0],
+  aboutExterior: HOUSE_ASSETS[0],
+  aboutCourtyard: HOUSE_ASSETS[1],
+  aboutInterior: ROOM_ASSETS[2],
+  locationBuilding: HOUSE_ASSETS[2],
 } as const

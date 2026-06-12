@@ -40,4 +40,13 @@
   .filter-btn-active {
     @apply border-brand bg-brand text-white;
   }
+
+  .marker-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 9999px;
+    background: #f59e0b;
+    border: 3px solid white;
+    box-shadow: 0 0 0 6px rgba(245, 158, 11, 0.15);
+  }
 }

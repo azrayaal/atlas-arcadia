@@ -1,5 +1,5 @@
 import { UNITS } from '@/data/siteLayout'
-import { getRoomImages } from '@/data/roomAssets'
+import { getRoomImages, HOUSE_ASSETS, ROOM_ASSETS } from '@/data/roomAssets'
 import type { BlockId, KosUnit, UnitStatus } from '@/types'
 import type {
   BuildingAmenity,
@@ -38,12 +38,12 @@ const BLOCK_DESCRIPTIONS: Record<BlockId, string> = {
 }
 
 const BLOCK_IMAGES: Record<BlockId, string> = {
-  A: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80&fit=crop',
-  B: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80&fit=crop',
-  C: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80&fit=crop',
-  D: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80&fit=crop',
-  E: 'https://images.unsplash.com/photo-1600210492494-0946919438ea?w=800&q=80&fit=crop',
-  F: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=800&q=80&fit=crop',
+  A: HOUSE_ASSETS[0],
+  B: HOUSE_ASSETS[1],
+  C: HOUSE_ASSETS[2],
+  D: HOUSE_ASSETS[3],
+  E: HOUSE_ASSETS[0],
+  F: HOUSE_ASSETS[1],
 }
 
 function mapUnitStatus(status: UnitStatus): RoomStatus {
@@ -57,8 +57,7 @@ function unitToRoom(unit: KosUnit): MasterplanRoom {
   const baseImages = getRoomImages(unit.type, unit.bedrooms)
   const gallery = [
     ...baseImages,
-    `https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?w=1200&q=80&fit=crop&sig=${unit.id}a`,
-    `https://images.unsplash.com/photo-1615529328331-f8917597711f?w=1200&q=80&fit=crop&sig=${unit.id}b`,
+    ...ROOM_ASSETS.filter((src) => !baseImages.includes(src)),
   ].slice(0, 5)
 
   return {
